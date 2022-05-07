@@ -1,3 +1,5 @@
 - dataset: vivos vietnamese
 - model: deep speech
-- feature: spectrogram
+- feature: spectrogram 
+
+có cả số

@@ -3,7 +3,7 @@ import torch
 
 class TextProcess:
 
-    aux_vocab = ["<pad>", "<sos>", "<eos>", " ", ":", "'"]
+    aux_vocab = ["<p>", "<s>", "<e>", " ", ":", "'"]
 
     origin_list_vocab = {
         "en": aux_vocab + list("abcdefghijklmnopqrstuvwxyz"),

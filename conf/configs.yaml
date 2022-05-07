@@ -9,6 +9,7 @@ datamodule:
   batch_size: 4
 
 model:
+  lr: 0.0001
   n_feature: 80 # n_fft // 2 + 1
   n_hidden: 2048
   dropout: 0.1

@@ -26,13 +26,6 @@ class VivosDataset(Dataset):
             trans = [i[1] for i in transcripts]
             self.transcripts = dict(zip(filenames, trans))
 
-        # remove transcript with number in it
-        list_del = [
-            idx for idx, i in enumerate(trans) if [j for j in i if j in "0123456789"]
-        ]
-        for i in list_del:
-            del self.walker[i]
-
         self.feature_transform = torchaudio.transforms.Spectrogram(n_fft=n_fft)
 
     def __len__(self):

@@ -36,6 +36,7 @@ class DeepSpeechModule(pl.LightningModule):
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
+        return optimizer
 
     def training_step(self, batch, batch_idx):
         inputs, input_lengths, targets, target_lengths = batch

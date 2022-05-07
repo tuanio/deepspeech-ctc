@@ -26,7 +26,10 @@ if __name__ == "__main__":
 
         n_class = len(text_process.list_vocab)
         model = DeepSpeechModule(
-            n_class=n_class, text_process=text_process, **cfg.model
+            n_class=n_class,
+            text_process=text_process,
+            cfg_optim=cfg.optimizer,
+            **cfg.model
         )
 
         logger = pl.loggers.tensorboard.TensorBoardLogger(**cfg.logger)

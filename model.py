@@ -15,6 +15,7 @@ class DeepSpeechModule(pl.LightningModule):
         n_class: int,
         lr: float,
         text_process: TextProcess,
+        cfg_optim: dict,
     ):
         super().__init__()
         self.deepspeech = DeepSpeech(
@@ -23,6 +24,7 @@ class DeepSpeechModule(pl.LightningModule):
         self.lr = lr
         self.text_process = text_process
         self.cal_wer = torchmetrics.WordErrorRate()
+        self.cfg_optim = cfg_optim
 
     def forward(self, inputs):
         """predicting function"""
@@ -35,7 +37,7 @@ class DeepSpeechModule(pl.LightningModule):
         return predicts
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
+        optimizer = torch.optim.SGD(self.parameters(), lr=self.lr, **self.cfg_optim)
         return optimizer
 
     def training_step(self, batch, batch_idx):

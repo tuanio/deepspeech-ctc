@@ -27,16 +27,23 @@ class VivosDataModule(pl.LightningDataModule):
             batch_size=self.batch_size,
             collate_fn=self._collate_fn,
             shuffle=True,
+            pin_memory=True,
         )
 
     def val_dataloader(self):
         return DataLoader(
-            self.valset, batch_size=self.batch_size, collate_fn=self._collate_fn,
+            self.valset,
+            batch_size=self.batch_size,
+            collate_fn=self._collate_fn,
+            pin_memory=True,
         )
 
     def test_dataloader(self):
         return DataLoader(
-            self.testset, batch_size=self.batch_size, collate_fn=self._collate_fn,
+            self.testset,
+            batch_size=self.batch_size,
+            collate_fn=self._collate_fn,
+            pin_memory=True,
         )
 
     def _collate_fn(self, batch):

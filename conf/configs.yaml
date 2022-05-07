@@ -6,7 +6,7 @@ text_process:
   lang: "vi"
 
 datamodule:
-  batch_size: 4
+  batch_size: 8
 
 model:
   lr: 0.0001

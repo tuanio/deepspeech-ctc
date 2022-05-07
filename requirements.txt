@@ -1,0 +1,8 @@
+torch
+torchtext
+torchaudio
+pytorch-lightning
+hydra-core
+tensorboard
+PySoundFile
+torchmetrics

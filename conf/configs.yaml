@@ -1,0 +1,25 @@
+dataset:
+  root: D:\NCKH 2022\vivos
+  n_fft: 159
+
+text_process:
+  lang: "vi"
+
+datamodule:
+  batch_size: 4
+
+model:
+  n_feature: 80 # n_fft // 2 + 1
+  n_hidden: 2048
+  dropout: 0.1
+  lr: 0.001
+
+logger:
+  save_dir: loggers
+  name: deepspeech
+
+trainer:
+  max_epochs: 100
+  accelerator: auto
+  detect_anomaly: True
+  accumulate_grad_batches: 8

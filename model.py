@@ -63,9 +63,6 @@ class DeepSpeechModule(pl.LightningModule):
 
         # unsqueeze for batchsize 1
         predicts = [self.ctc_decoder(sent.unsqueeze(0)) for sent in outputs]
-
-        print(predicts)
-
         targets = [self.text_process.int2text(sent) for sent in targets]
 
         list_wer = torch.tensor(

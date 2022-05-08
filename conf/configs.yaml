@@ -27,3 +27,7 @@ trainer:
   accelerator: auto
   detect_anomaly: True
   accumulate_grad_batches: 8
+
+ckpt:
+  have_ckpt: True
+  ckpt_path: ...

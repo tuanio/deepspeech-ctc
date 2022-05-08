@@ -61,9 +61,11 @@ class DeepSpeechModule(pl.LightningModule):
             outputs.permute(1, 0, 2), targets, input_lengths, target_lengths
         )
 
-
         # unsqueeze for batchsize 1
         predicts = [self.ctc_decoder(sent.unsqueeze(0)) for sent in outputs]
+
+        print(predicts)
+
         targets = [self.text_process.int2text(sent) for sent in targets]
 
         list_wer = torch.tensor(
@@ -85,8 +87,6 @@ class DeepSpeechModule(pl.LightningModule):
         loss = F.ctc_loss(
             outputs.permute(1, 0, 2), targets, input_lengths, target_lengths
         )
-
-        decode = outputs.argmax(dim=-1)
 
         predicts = [self.ctc_decoder(sent.unsqueeze(0)) for sent in outputs]
         targets = [self.text_process.int2text(sent) for sent in targets]

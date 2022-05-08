@@ -1,7 +1,7 @@
 import torch
 from torchaudio.models import DeepSpeech
 import pytorch_lightning as pl
-from utils import TextProcess
+from utils import TextProcess, CTCDecoder
 import torch.nn.functional as F
 import torchmetrics
 
@@ -15,6 +15,7 @@ class DeepSpeechModule(pl.LightningModule):
         n_class: int,
         lr: float,
         text_process: TextProcess,
+        ctc_decoder: CTCDecoder,
         cfg_optim: dict,
     ):
         super().__init__()
@@ -23,6 +24,7 @@ class DeepSpeechModule(pl.LightningModule):
         )
         self.lr = lr
         self.text_process = text_process
+        self.ctc_decoder = ctc_decoder
         self.cal_wer = torchmetrics.WordErrorRate()
         self.cfg_optim = cfg_optim
 
@@ -59,9 +61,7 @@ class DeepSpeechModule(pl.LightningModule):
             outputs.permute(1, 0, 2), targets, input_lengths, target_lengths
         )
 
-        decode = outputs.argmax(dim=-1)
-
-        predicts = [self.text_process.int2text(sent) for sent in decode]
+        predicts = [self.ctc_decoder(sent) for sent in outputs]
         targets = [self.text_process.int2text(sent) for sent in targets]
 
         list_wer = torch.tensor(
@@ -86,7 +86,7 @@ class DeepSpeechModule(pl.LightningModule):
 
         decode = outputs.argmax(dim=-1)
 
-        predicts = [self.text_process.int2text(sent) for sent in decode]
+        predicts = [self.ctc_decoder(sent) for sent in outputs]
         targets = [self.text_process.int2text(sent) for sent in targets]
 
         list_wer = torch.tensor(

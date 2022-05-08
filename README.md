@@ -16,6 +16,9 @@ Deep Speech model is one of the ASR that got the SOTA in Speech Recognition doma
 ```
 !pip install -r requirements.txt
 ```
+
+Then install `ctcdecode` from this respository: https://github.com/parlance/ctcdecode
+
 3. Edit `configs.yaml` file for appropriation.
 4. Train model using `python main.py -cp conf -cn configs`
 

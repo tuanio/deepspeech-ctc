@@ -1,5 +1,5 @@
 import argparse
-from utils import TextProcess
+from utils import TextProcess, CTCDecoder
 from datasets import VivosDataset
 from datamodule import VivosDataModule
 from model import DeepSpeechModule
@@ -18,6 +18,7 @@ if __name__ == "__main__":
     @hydra.main(config_path=args.cp, config_name=args.cn)
     def main(cfg: DictConfig):
         text_process = TextProcess(**cfg.text_process)
+        ctc_decoder = CTCDecoder(text_process=text_process, **cfg.ctcdecoder)
 
         trainset = VivosDataset(**cfg.dataset, subset="train")
         testset = VivosDataset(**cfg.dataset, subset="test")
@@ -28,6 +29,7 @@ if __name__ == "__main__":
         model = DeepSpeechModule(
             n_class=n_class,
             text_process=text_process,
+            ctc_decoder=ctc_decoder,
             cfg_optim=cfg.optimizer,
             **cfg.model
         )

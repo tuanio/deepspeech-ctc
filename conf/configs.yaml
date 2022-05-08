@@ -29,5 +29,11 @@ trainer:
   accumulate_grad_batches: 8
 
 ckpt:
-  have_ckpt: True
+  have_ckpt: False
   ckpt_path: ...
+
+ctcdecoder:
+  alpha: 0.5
+  beta: 0.96
+  beam_size: 100
+  kenlm_path: r"C:\Users\nvatu\Downloads\6-gram-lm.binary"

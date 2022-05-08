@@ -32,8 +32,10 @@ ckpt:
   have_ckpt: False
   ckpt_path: ...
 
-ctcdecoder:
-  alpha: 0.5
-  beta: 0.96
-  beam_size: 100
-  kenlm_path: r"C:\Users\nvatu\Downloads\6-gram-lm.binary"
+decoder:
+  type: greedy # beamsearch
+  ctcdecoder:
+    alpha: 0.5
+    beta: 0.96
+    beam_size: 100
+    kenlm_path: r"C:\Users\nvatu\Downloads\6-gram-lm.binary"

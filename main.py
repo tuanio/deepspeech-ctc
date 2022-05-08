@@ -18,7 +18,10 @@ if __name__ == "__main__":
     @hydra.main(config_path=args.cp, config_name=args.cn)
     def main(cfg: DictConfig):
         text_process = TextProcess(**cfg.text_process)
-        ctc_decoder = CTCDecoder(text_process=text_process, **cfg.ctcdecoder)
+        if cfg.type == 'beamsearch':
+            ctc_decoder = CTCDecoder(text_process=text_process, **cfg.ctcdecoder)
+        else:
+            ctc_decoder = None
 
         trainset = VivosDataset(**cfg.dataset, subset="train")
         testset = VivosDataset(**cfg.dataset, subset="test")

@@ -66,7 +66,7 @@ class DeepSpeechModule(pl.LightningModule):
             predicts = [self.ctc_decoder(sent.unsqueeze(0)) for sent in outputs]
         else:
             decode = outputs.argmax(dim=-1)
-            predicts = [self.text_process.int2text(sent) for sent in decode]
+            predicts = [self.text_process.decode(sent) for sent in decode]
 
 
         targets = [self.text_process.int2text(sent) for sent in targets]
@@ -96,7 +96,7 @@ class DeepSpeechModule(pl.LightningModule):
             predicts = [self.ctc_decoder(sent.unsqueeze(0)) for sent in outputs]
         else:
             decode = outputs.argmax(dim=-1)
-            predicts = [self.text_process.int2text(sent) for sent in decode]
+            predicts = [self.text_process.decode(sent) for sent in decode]
         
         targets = [self.text_process.int2text(sent) for sent in targets]
 

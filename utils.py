@@ -5,6 +5,7 @@ import ctcdecode
 class TextProcess:
 
     aux_vocab = ["<p>", "<s>", "<e>", " ", ":", "'"]
+    blank_label = 0
 
     origin_list_vocab = {
         "en": aux_vocab + list("abcdefghijklmnopqrstuvwxyz"),
@@ -18,6 +19,18 @@ class TextProcess:
         lang: dict(zip(vocab, range(len(vocab))))
         for lang, vocab in origin_list_vocab.items()
     }
+
+    def decode(self, arg_maxes, collapse_repeated=True):
+        '''
+            decode greedy
+        '''
+        decode = []
+        for i, index in enumerate(arg_maxes):
+            if index != blank_label:
+                if collapse_repeated and i != 0 and index == arg_maxes[i -1]:
+                    continue
+                decode.append(index.item())
+        return self.text2int(decode)
 
     def __init__(self, lang):
         self.lang = lang

@@ -35,7 +35,7 @@ class DeepSpeechModule(pl.LightningModule):
             inputs = inputs.unsqueeze(0)
         outputs = self.deepspeech(inputs)
         decode = outputs.argmax(dim=-1)
-        predicts = [self.text_process.int2text(sent) for sent in decode]
+        predicts = [self.text_process.decode(sent) for sent in decode]
         return predicts
 
     def configure_optimizers(self):

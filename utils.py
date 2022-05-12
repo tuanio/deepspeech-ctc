@@ -26,7 +26,7 @@ class TextProcess:
         '''
         decode = []
         for i, index in enumerate(arg_maxes):
-            if index != blank_label:
+            if index != self.blank_label:
                 if collapse_repeated and i != 0 and index == arg_maxes[i -1]:
                     continue
                 decode.append(index.item())

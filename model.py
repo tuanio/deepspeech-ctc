@@ -68,7 +68,6 @@ class DeepSpeechModule(pl.LightningModule):
             decode = outputs.argmax(dim=-1)
             predicts = [self.text_process.decode(sent) for sent in decode]
 
-
         targets = [self.text_process.int2text(sent) for sent in targets]
 
         list_wer = torch.tensor(
@@ -97,7 +96,7 @@ class DeepSpeechModule(pl.LightningModule):
         else:
             decode = outputs.argmax(dim=-1)
             predicts = [self.text_process.decode(sent) for sent in decode]
-        
+
         targets = [self.text_process.int2text(sent) for sent in targets]
 
         list_wer = torch.tensor(

@@ -20,14 +20,14 @@ class TextProcess:
         for lang, vocab in origin_list_vocab.items()
     }
 
-    def decode(self, arg_maxes, collapse_repeated=True):
-        '''
-            decode greedy
-        '''
+    def decode(self, arg_maxes):
+        """
+            decode greedy with collapsed repeat
+        """
         decode = []
         for i, index in enumerate(arg_maxes):
             if index != self.blank_label:
-                if collapse_repeated and i != 0 and index == arg_maxes[i -1]:
+                if i != 0 and index == arg_maxes[i - 1]:
                     continue
                 decode.append(index.item())
         return self.text2int(decode)
@@ -52,8 +52,8 @@ class CTCDecoder:
         beta: float = 0.96,
         beam_size: int = 100,
         kenlm_path: str = None,
-        text_process: TextProcess = None
-    ):  
+        text_process: TextProcess = None,
+    ):
         self.text_process = text_process
         labels = text_process.list_vocab
         blank_id = labels.index("<p>")
@@ -65,7 +65,7 @@ class CTCDecoder:
             beta=beta,
             beam_width=beam_size,
             blank_id=blank_id,
-            model_path=kenlm_path
+            model_path=kenlm_path,
         )
         print("finished loading beam search")
 

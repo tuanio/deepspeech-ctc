@@ -30,7 +30,7 @@ class TextProcess:
                 if i != 0 and index == arg_maxes[i - 1]:
                     continue
                 decode.append(index.item())
-        return self.text2int(decode)
+        return self.int2text(decode)
 
     def __init__(self, lang):
         self.lang = lang

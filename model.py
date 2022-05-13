@@ -1,4 +1,5 @@
 import torch
+from torch import nn
 from torchaudio.models import DeepSpeech
 import pytorch_lightning as pl
 from utils import TextProcess, CTCDecoder

@@ -27,6 +27,7 @@ class DeepSpeechModule(pl.LightningModule):
         self.ctc_decoder = ctc_decoder
         self.cal_wer = torchmetrics.WordErrorRate()
         self.cfg_optim = cfg_optim
+        self.criterion = nn.CTCLoss(zero_infinity=True)
 
     def forward(self, inputs):
         """predicting function"""
@@ -45,7 +46,7 @@ class DeepSpeechModule(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         inputs, input_lengths, targets, target_lengths = batch
         outputs = self.deepspeech(inputs)
-        loss = F.ctc_loss(
+        loss = self.criterion(
             outputs.permute(1, 0, 2), targets, input_lengths, target_lengths
         )
 
@@ -57,7 +58,7 @@ class DeepSpeechModule(pl.LightningModule):
         inputs, input_lengths, targets, target_lengths = batch
 
         outputs = self.deepspeech(inputs)
-        loss = F.ctc_loss(
+        loss = self.criterion(
             outputs.permute(1, 0, 2), targets, input_lengths, target_lengths
         )
 
@@ -86,7 +87,7 @@ class DeepSpeechModule(pl.LightningModule):
         inputs, input_lengths, targets, target_lengths = batch
         outputs = self.deepspeech(inputs)
 
-        loss = F.ctc_loss(
+        loss = self.criterion(
             outputs.permute(1, 0, 2), targets, input_lengths, target_lengths
         )
 

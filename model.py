@@ -16,7 +16,6 @@ class DeepSpeechModule(pl.LightningModule):
         n_class: int,
         lr: float,
         text_process: TextProcess,
-        ctc_decoder: CTCDecoder,
         cfg_optim: dict,
     ):
         super().__init__()
@@ -25,7 +24,6 @@ class DeepSpeechModule(pl.LightningModule):
         )
         self.lr = lr
         self.text_process = text_process
-        self.ctc_decoder = ctc_decoder
         self.cal_wer = torchmetrics.WordErrorRate()
         self.cfg_optim = cfg_optim
         self.criterion = nn.CTCLoss(zero_infinity=True)
@@ -63,12 +61,8 @@ class DeepSpeechModule(pl.LightningModule):
             outputs.permute(1, 0, 2), targets, input_lengths, target_lengths
         )
 
-        if self.ctc_decoder:
-            # unsqueeze for batchsize 1
-            predicts = [self.ctc_decoder(sent.unsqueeze(0)) for sent in outputs]
-        else:
-            decode = outputs.argmax(dim=-1)
-            predicts = [self.text_process.decode(sent) for sent in decode]
+        decode = outputs.argmax(dim=-1)
+        predicts = [self.text_process.decode(sent) for sent in decode]
 
         targets = [self.text_process.int2text(sent) for sent in targets]
 
@@ -92,12 +86,8 @@ class DeepSpeechModule(pl.LightningModule):
             outputs.permute(1, 0, 2), targets, input_lengths, target_lengths
         )
 
-        if self.ctc_decoder:
-            # unsqueeze for batchsize 1
-            predicts = [self.ctc_decoder(sent.unsqueeze(0)) for sent in outputs]
-        else:
-            decode = outputs.argmax(dim=-1)
-            predicts = [self.text_process.decode(sent) for sent in decode]
+        decode = outputs.argmax(dim=-1)
+        predicts = [self.text_process.decode(sent) for sent in decode]
 
         targets = [self.text_process.int2text(sent) for sent in targets]
 

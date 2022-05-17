@@ -53,8 +53,7 @@ if uploaded_file is not None:
     fig.tight_layout()
     st.pyplot(fig)
 
-ext = uploaded_file.name.split(".")[-1]
-st.audio(uploaded_file, format="audio/" + ext)
+st.audio(uploaded_file, format=uploaded_file.type)
 
 if st.button("Predict"):
 

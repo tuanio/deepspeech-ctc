@@ -39,6 +39,11 @@ if __name__ == "__main__":
             trainer.fit(model, datamodule=dm, ckpt_path=cfg.ckpt.ckpt_path)
         else:
             trainer.fit(model, datamodule=dm)
+
+        print("Validate")
+        trainer.validate(model, datamodule=dm)
+        
+        print("Test")
         trainer.test(model, datamodule=dm)
 
     main()

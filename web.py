@@ -21,7 +21,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 st.markdown(
-    "<h4 style='text-align: center; text-decoration-line: line-through'><i>SOTA Team but not SOTA tools</i></h2>",
+    "<h3 style='text-align: center; text-decoration-line: line-through'><i>SOTA team but not SOTA tool</i></h3>",
     unsafe_allow_html=True,
 )
 

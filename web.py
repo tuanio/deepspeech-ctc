@@ -25,23 +25,11 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-ckpt_option = st.selectbox(
-    "Select the best of SOTA checkpoint ASR model",
-    [
-        "https://github.com/tuanio/deepspeech-ctc/releases/download/deepspeech/epoch.466-step.46204.ckpt",
-        "https://github.com/tuanio/deepspeech-ctc/releases/download/deepspeech/epoch.555-step.54392.ckpt",
-        "https://github.com/tuanio/deepspeech-ctc/releases/download/deepspeech/epoch.662-step.64236.ckpt",
-        "https://github.com/tuanio/deepspeech-ctc/releases/download/deepspeech/epoch.767-step.73896.ckpt",
-        "https://github.com/tuanio/deepspeech-ctc/releases/download/deepspeech/epoch.873-step.83648.ckpt",
-        "https://github.com/tuanio/deepspeech-ctc/releases/download/deepspeech/epoch.978-step.102863.ckpt",
-    ],
-)
-
 # for deepspeech
 text_process = TextProcess(**cfg.text_process)
 n_class = len(text_process.list_vocab)
 model = DeepSpeechModule.load_from_checkpoint(
-    ckpt_option,
+    cfg.ckpt.ckpt_path,
     n_class=n_class,
     text_process=text_process,
     cfg_optim=cfg.optimizer,

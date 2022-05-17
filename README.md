@@ -25,6 +25,23 @@ Then install `ctcdecode` from this respository: https://github.com/parlance/ctcd
 # Run the Web Demo version
 - `streamlit run web.py`
 
+# Train results
+
+<p>
+    <img src="assets\train_loss.jpg" alt="train_loss"/>
+    <em>Train loss of Deep Speech on 978 epochs</em>
+</p>
+
+<p>
+    <img src="assets\validation_loss.jpg" alt="validation_loss"/>
+    <em>Validation loss of Deep Speech</em>
+</p>
+
+<p>
+    <img src="assets\validation_wer.jpg" alt="validation_wer"/>
+    <em>Validation word error rate (mean wer) of Deep Speech</em>
+</p>
+
 ## Note
 - `sox` is audio backend for linux, `PySoundFile` is audio backend for windows
 

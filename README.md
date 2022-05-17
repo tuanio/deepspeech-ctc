@@ -29,6 +29,7 @@ Then install `ctcdecode` from this respository: https://github.com/parlance/ctcd
 
 <p>
     <img src="assets\train_loss.jpg" alt="train_loss"/>
+    <br>
     <em>Train loss of Deep Speech on 978 epochs</em>
 </p>
 
@@ -36,6 +37,7 @@ Then install `ctcdecode` from this respository: https://github.com/parlance/ctcd
 
 <p>
     <img src="assets\validation_loss.jpg" alt="validation_loss"/>
+    <br>
     <em>Validation loss of Deep Speech</em>
 </p>
 
@@ -43,6 +45,7 @@ Then install `ctcdecode` from this respository: https://github.com/parlance/ctcd
 
 <p>
     <img src="assets\validation_wer.jpg" alt="validation_wer"/>
+    <br>
     <em>Validation word error rate (mean wer) of Deep Speech</em>
 </p>
 

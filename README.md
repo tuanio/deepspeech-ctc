@@ -32,10 +32,14 @@ Then install `ctcdecode` from this respository: https://github.com/parlance/ctcd
     <em>Train loss of Deep Speech on 978 epochs</em>
 </p>
 
+<br>
+
 <p>
     <img src="assets\validation_loss.jpg" alt="validation_loss"/>
     <em>Validation loss of Deep Speech</em>
 </p>
+
+<br>
 
 <p>
     <img src="assets\validation_wer.jpg" alt="validation_wer"/>

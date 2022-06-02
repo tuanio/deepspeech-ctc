@@ -25,7 +25,7 @@ if __name__ == "__main__":
             text_process = BPEBased(**cfg.text.bpe.params)
             n_class = cfg.text.bpe.params.vocab_size
 
-        trainset = ComposeDataset(**cfg.dataset, subset="train")
+        trainset = ComposeDataset(**cfg.dataset, vivos_subset="train")
 
         if cfg.text.tokenizer == "bpe":
             if not cfg.text.bpe.is_train:
@@ -44,7 +44,7 @@ if __name__ == "__main__":
                 print("Load PBE from path...")
                 text_process.load(cfg.text.bpe.in_path)
 
-        testset = ComposeDataset(**cfg.dataset, subset="test")
+        testset = ComposeDataset(**cfg.dataset, vivos_subset="test")
 
         dm = VivosDataModule(trainset, testset, text_process, **cfg.datamodule)
 

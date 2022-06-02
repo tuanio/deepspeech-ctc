@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Deep Speech model is one of the ASR that got the SOTA in Speech Recognition domain. In this respository, I use Deep Speech with Vivos Vietnamese Dataset. 
+Deep Speech model is one of the ASR that got the SOTA in Speech Recognition domain. In this respository, I use Deep Speech with Vivos Dataset and Vin BigData VLSP 2020 Dataset. 
 
 ## How to use this respository
 

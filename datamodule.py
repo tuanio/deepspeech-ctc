@@ -53,13 +53,13 @@ class VivosDataModule(pl.LightningDataModule):
         specs = [i[0] for i in batch]
         input_lengths = torch.LongTensor([i.size(0) for i in specs])
         trans = [i[1] for i in batch]
-        target_lengths = torch.LongTensor([len(s) for s in trans])
 
         # batch, time, feature
         specs = torch.nn.utils.rnn.pad_sequence(specs, batch_first=True)
         specs = specs.unsqueeze(1)  # batch, channel, time, feature
 
         trans = [self.text_process.text2int(s) for s in trans]
+        target_lengths = torch.LongTensor([s.size(0) for s in trans])
         trans = torch.nn.utils.rnn.pad_sequence(trans, batch_first=True).to(
             dtype=torch.long
         )

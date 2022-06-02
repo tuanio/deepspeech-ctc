@@ -8,12 +8,12 @@ text:
     lang: "vi"
   bpe:
     params:
-      vocab_size: 200
+      vocab_size: 1000
       pct_bpe: 1
       ngram_min: 2
-      ngram_max: 3
+      ngram_max: 2
       required_tokens: ["__blank"]
-    is_train: True
+    is_train: False
     in_path: "D:\\NCKH 2022\\deepspeech-ctc\\vocab.json"
 
 datamodule:

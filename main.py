@@ -33,7 +33,13 @@ if __name__ == "__main__":
                 text_corpus = [i[1] for i in trainset]
                 print("Fitting text corpus to BPE...")
                 text_process.fit(text_corpus)
-                text_process.encoder.save(cfg.text.bpe.in_path)
+                # text_process.encoder.save(cfg.text.bpe.in_path)
+                json.dump(
+                    text_process.encoder.vocabs_to_dict(),
+                    open(cfg.text.bpe.in_path, "w", encoding="utf-8"),
+                    ensure_ascii=False,
+                    indent=2,
+                )
             else:
                 print("Load PBE from path...")
                 text_process.load(cfg.text.bpe.in_path)

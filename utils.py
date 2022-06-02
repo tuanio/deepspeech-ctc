@@ -13,7 +13,10 @@ class TextProcess(ABC):
     def int2text(self, data):
         pass
 
-    def decode(self, argmax: torch.Tensor):
+    def __init__(self):
+        self.blank_label = 0
+
+    def decode(self, arg_maxes: torch.Tensor):
         """
             decode greedy with collapsed repeat
         """
@@ -28,7 +31,6 @@ class TextProcess(ABC):
 
 class CharacterBased(TextProcess):
     aux_vocab = ["<p>", "<s>", "<e>", " ", ":", "'"]
-    blank_label = 0
 
     origin_list_vocab = {
         "en": aux_vocab + list("abcdefghijklmnopqrstuvwxyz"),
@@ -44,6 +46,7 @@ class CharacterBased(TextProcess):
     }
 
     def __init__(self, lang: str = "vi"):
+        super().__init__()
         self.lang = lang
         assert self.lang in ["vi", "en"], "Language not found"
         self.vocab = self.origin_vocab[lang]
@@ -58,10 +61,12 @@ class CharacterBased(TextProcess):
 
 class BPEBased(TextProcess):
     def __init__(self, **kwargs):
+        super().__init__()
         self.encoder = bpe.Encoder(**kwargs)
 
     def fit(self, text_corpus: str = ""):
-        return self.encoder.fit(text_corpus)
+        self.encoder.fit(text_corpus)
+        self.blank = self.encoder.word_vocab["__blank"]
 
     def tokenize(self, text: str):
         return self.encoder.tokenize(text)
@@ -69,10 +74,14 @@ class BPEBased(TextProcess):
     def text2int(self, text: str):
         if isinstance(text, str):
             text = [text]
-        return torch.Tensor(next(self.encoder.transform(text)))
+        return torch.LongTensor(next(self.encoder.transform(text)))
 
     def int2text(self, idx: List[int]):
+        if isinstance(idx, torch.Tensor):
+            idx = idx.tolist()
+        idx = [[i for i in idx if i not in [0, 1, 2]]]  # 0, 1, 2 is not use
         return next(self.encoder.inverse_transform(idx))
 
     def load(self, in_path):
         self.encoder = self.encoder.load(in_path)
+        self.blank = self.encoder.word_vocab["__blank"]

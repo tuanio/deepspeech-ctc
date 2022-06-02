@@ -1,5 +1,6 @@
 dataset:
-  root: D:\NCKH 2022\vivos
+  vivos_root: D:\NCKH 2022\vivos
+  vlsp_root: ...
   n_fft: 400
 
 text:

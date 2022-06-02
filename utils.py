@@ -1,8 +1,32 @@
 import torch
+import bpe
+from typing import List
+from abc import ABC, abstractmethod
 
 
-class TextProcess:
+class TextProcess(ABC):
+    @abstractmethod
+    def text2int(self, data):
+        pass
 
+    @abstractmethod
+    def int2text(self, data):
+        pass
+
+    def decode(self, argmax: torch.Tensor):
+        """
+            decode greedy with collapsed repeat
+        """
+        decode = []
+        for i, index in enumerate(arg_maxes):
+            if index != self.blank_label:
+                if i != 0 and index == arg_maxes[i - 1]:
+                    continue
+                decode.append(index.item())
+        return self.int2text(decode)
+
+
+class CharacterBased(TextProcess):
     aux_vocab = ["<p>", "<s>", "<e>", " ", ":", "'"]
     blank_label = 0
 
@@ -19,19 +43,7 @@ class TextProcess:
         for lang, vocab in origin_list_vocab.items()
     }
 
-    def decode(self, arg_maxes):
-        """
-            decode greedy with collapsed repeat
-        """
-        decode = []
-        for i, index in enumerate(arg_maxes):
-            if index != self.blank_label:
-                if i != 0 and index == arg_maxes[i - 1]:
-                    continue
-                decode.append(index.item())
-        return self.int2text(decode)
-
-    def __init__(self, lang):
+    def __init__(self, lang: str = "vi"):
         self.lang = lang
         assert self.lang in ["vi", "en"], "Language not found"
         self.vocab = self.origin_vocab[lang]
@@ -44,32 +56,23 @@ class TextProcess:
         return "".join([self.list_vocab[i] for i in s if i > 2])
 
 
-# class CTCDecoder:
-#     def __init__(
-#         self,
-#         alpha: float = 0.5,
-#         beta: float = 0.96,
-#         beam_size: int = 100,
-#         kenlm_path: str = None,
-#         text_process: TextProcess = None,
-#     ):
-#         self.text_process = text_process
-#         labels = text_process.list_vocab
-#         blank_id = labels.index("<p>")
+class BPEBased(TextProcess):
+    def __init__(self, **kwargs):
+        self.encoder = bpe.Encoder(**kwargs)
 
-#         print("loading beam search with lm...")
-#         self.decoder = ctcdecode.CTCBeamDecoder(
-#             labels,
-#             alpha=alpha,
-#             beta=beta,
-#             beam_width=beam_size,
-#             blank_id=blank_id,
-#             model_path=kenlm_path,
-#         )
-#         print("finished loading beam search")
+    def fit(self, text_corpus: str = ""):
+        return self.encoder.fit(text_corpus)
 
-#     def __call__(self, output: torch.Tensor) -> str:
-#         beam_result, beam_scores, timesteps, out_seq_len = self.decoder.decode(output)
-#         tokens = beam_result[0][0]
-#         seq_len = out_seq_len[0][0]
-#         return self.text_process.int2text(tokens[:seq_len])
+    def tokenize(self, text: str):
+        return self.encoder.tokenize(text)
+
+    def text2int(self, text: str):
+        if isinstance(text, str):
+            text = [text]
+        return torch.Tensor(next(self.encoder.transform(text)))
+
+    def int2text(self, idx: List[int]):
+        return next(self.encoder.inverse_transform(idx))
+
+    def load(self, in_path):
+        self.encoder = self.encoder.load(in_path)

@@ -57,6 +57,11 @@ class DeepSpeechModule(pl.LightningModule):
         inputs, input_lengths, targets, target_lengths = batch
 
         outputs = self.deepspeech(inputs)
+        print(inputs.size())
+        print(input_lengths)
+        print(targets.size())
+        print(target_lengths)
+        print(outputs.size())
         loss = self.criterion(
             outputs.permute(1, 0, 2), targets, input_lengths, target_lengths
         )

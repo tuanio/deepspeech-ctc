@@ -1,11 +1,12 @@
 import argparse
-from utils import TextProcess
+from utils import CharacterBased, BPEBased
 from datasets import VivosDataset
 from datamodule import VivosDataModule
 from model import DeepSpeechModule
 import hydra
 from omegaconf import OmegaConf, DictConfig
 import pytorch_lightning as pl
+import json
 
 if __name__ == "__main__":
 
@@ -17,14 +18,30 @@ if __name__ == "__main__":
 
     @hydra.main(config_path=args.cp, config_name=args.cn)
     def main(cfg: DictConfig):
-        text_process = TextProcess(**cfg.text_process)
+        if cfg.text.tokenizer == "character":
+            text_process = CharacterBased(**cfg.text.character)
+            n_class = len(text_process.list_vocab)
+        elif cfg.text.tokenizer == "bpe":
+            text_process = BPEBased(**cfg.text.bpe.params)
+            n_class = cfg.text.bpe.params.vocab_size
 
         trainset = VivosDataset(**cfg.dataset, subset="train")
+
+        if cfg.text.tokenizer == "bpe":
+            if not cfg.text.bpe.is_train:
+                print("Getting text corpus from train")
+                text_corpus = [i[1] for i in trainset]
+                print("Fitting text corpus to BPE...")
+                text_process.fit(text_corpus)
+                text_process.encoder.save(cfg.text.bpe.in_path)
+            else:
+                print("Load PBE from path...")
+                text_process.load(cfg.text.bpe.in_path)
+
         testset = VivosDataset(**cfg.dataset, subset="test")
 
         dm = VivosDataModule(trainset, testset, text_process, **cfg.datamodule)
 
-        n_class = len(text_process.list_vocab)
         model = DeepSpeechModule(
             n_class=n_class,
             text_process=text_process,
@@ -35,15 +52,20 @@ if __name__ == "__main__":
         logger = pl.loggers.tensorboard.TensorBoardLogger(**cfg.logger)
 
         trainer = pl.Trainer(logger=logger, **cfg.trainer)
-        if cfg.ckpt.have_ckpt:
-            trainer.fit(model, datamodule=dm, ckpt_path=cfg.ckpt.ckpt_path)
-        else:
-            trainer.fit(model, datamodule=dm)
 
-        print("Validate")
-        trainer.validate(model, datamodule=dm)
-        
-        print("Test")
-        trainer.test(model, datamodule=dm)
+        if cfg.session.train:
+            print("Training...")
+            if cfg.ckpt.have_ckpt:
+                trainer.fit(model, datamodule=dm, ckpt_path=cfg.ckpt.ckpt_path)
+            else:
+                trainer.fit(model, datamodule=dm)
+
+        if cfg.session.validate:
+            print("Validating...")
+            trainer.validate(model, datamodule=dm)
+
+        if cfg.session.test:
+            print("Testing...")
+            trainer.test(model, datamodule=dm)
 
     main()

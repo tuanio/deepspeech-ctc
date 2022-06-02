@@ -2,8 +2,19 @@ dataset:
   root: D:\NCKH 2022\vivos
   n_fft: 400
 
-text_process:
-  lang: "vi"
+text:
+  tokenizer: bpe
+  character:
+    lang: "vi"
+  bpe:
+    params:
+      vocab_size: 200
+      pct_bpe: 1
+      ngram_min: 2
+      ngram_max: 3
+      required_tokens: ["__blank"]
+    is_train: True
+    in_path: "D:\\NCKH 2022\\deepspeech-ctc\\vocab.json"
 
 datamodule:
   batch_size: 8
@@ -27,6 +38,11 @@ trainer:
   accelerator: auto
   detect_anomaly: True
   accumulate_grad_batches: 8
+
+session:
+  train: False
+  validate: True
+  test: False
 
 ckpt:
   have_ckpt: True
